@@ -25,7 +25,7 @@ int mod_inv(int a, int mod) {
   return s < 0 ? s + mod : s;
 }
 
-vector<int> solve_linear_equations_mod_m(
+vector<int> solve_Ax_b_mod(
     const Matrix& A, const vector<int>& b, const int mod, bool verify=true) {
   const int H = A.size(), W = A[0].size(); assert(int(b.size()) == H);
   Matrix mat(H, vector<int>(W + 1));
@@ -110,8 +110,10 @@ vector<int> solve_linear_equations_mod_m(
 }
 
 void verify() {
-  assert(solve_linear_equations_mod_m({{105, 70, 42, 30}}, {1}, 210).size() > 0);
-  assert(solve_linear_equations_mod_m({{105, 70, 42}}, {1}, 210).size() == 0);
+  assert(solve_Ax_b_mod({{105, 70, 42, 30}}, {1}, 210).size() > 0);
+  assert(solve_Ax_b_mod({{105, 70, 42}}, {1}, 210).size() == 0);
+  assert(solve_Ax_b_mod({{2, 1, 3}, {0, 2, 1}, {0, 0, 2}}, {0, 2, 0}, 4).size() > 0);
+
   {
     const int N = 512;
     Matrix A(N, vector<int>(N));
@@ -120,7 +122,7 @@ void verify() {
       for (int j = i; j < N; ++j) A[i][j] = A[j][i] = 2 * i + 2;
       b[i] = 2 * (i + 1) * (i + 1);
     }
-    assert(solve_linear_equations_mod_m(A, b, 1 << 30).size() > 0);
+    assert(solve_Ax_b_mod(A, b, 1 << 30).size() > 0);
   }
 
   mt19937 mt(12345);
@@ -147,13 +149,13 @@ void verify() {
         }
         return b;
       };
-      for (int H = 1; H <= 10; ++H) {
-        for (int W = 1; W <= 10; ++W) {
+      for (int H = 1; H <= 6; ++H) {
+        for (int W = 1; W <= 6; ++W) {
           for (int t = 0; t < 10000; ++t) {
             const auto A = random_matrix(H, W);
             const auto x = random_vector(W);
             auto b = mul(A, x);
-            auto y = solve_linear_equations_mod_m(A, b, mod);
+            auto y = solve_Ax_b_mod(A, b, mod);
             assert(y.size() > 0);
           }
         }
