@@ -103,7 +103,7 @@ vector<int> solve_Ax_b_mod(
     for (int y = 0; y < H; ++y) {
       int s = 0;
       for (int x = 0; x < W; ++x) s = (s + i64(A[y][x]) * ret[x]) % mod;
-      assert((s - b[y] % mod) % mod == 0);
+      assert((i64(s) - b[y] % mod) % mod == 0);
     }
   }
   return ret;
