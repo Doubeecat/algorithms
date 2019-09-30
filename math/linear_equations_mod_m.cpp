@@ -36,7 +36,7 @@ vector<int> solve_Ax_b_mod(
     if ((mat[y][W] = b[y] % mod) < 0) mat[y][W] += mod;
   }
 
-  // O(W^2 * (H + log(mod)))
+  // O(min(H, W) * W * (H + log(mod)))
   int rank = 0;
   for (int x = 0; x < W; ++x) {
     for (int y = rank + 1; y < H; ++y) {
